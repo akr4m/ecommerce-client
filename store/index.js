@@ -16,7 +16,7 @@ export const mutations = {
 
 export const actions = {
     async nuxtServerInit({ commit }) {
-        let response = await this.$axios.$get('categories')
+        let response = await this.$axios.$get('api/categories')
         
 
         commit('SET_CATEGORIES', response.data)

@@ -53,10 +53,20 @@
             </div>
 
             <div id="nav" class="navbar-menu">
-                <div class="navbar-end">
-                    <a href="" class="navbar-item">
+                <template v-if="$auth.loggedIn">
+                    <div class="navbar-end">
+                        <nuxt-link :to="{ name: 'account' }" class="navbar-item">
+                            {{ $auth.user.name }}
+                        </nuxt-link>
+                        <a href="#" class="navbar-item" @click.prevent="signOut">
+                            Sign out
+                        </a>
+                    </div>
+                </template>
+                <div class="navbar-end" v-else>
+                    <nuxt-link :to="{ name: 'auth-login' }" class="navbar-item">
                         Sign in
-                    </a>
+                    </nuxt-link>
                 </div>
             </div>
         </div>
@@ -71,6 +81,18 @@ export default {
         ...mapGetters({
             categories: 'categories'
         })
+    },
+
+    methods: {
+        async signOut() {
+            try {
+                await this.$auth.logout()
+
+                this.$router.replace({ name: 'index' })
+            } catch (e) {
+                
+            }
+        }
     }
 }
 </script>
