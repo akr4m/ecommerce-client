@@ -47,7 +47,7 @@ export default {
     methods: {
         async submit() {
             try {
-                await this.$axios.$get('/sanctum/csrf-cookie')
+                // await this.$axios.$get('/sanctum/csrf-cookie')
                 await this.$auth.loginWith('local', { data: this.form })
 
                 this.$router.replace({ name: 'index' })

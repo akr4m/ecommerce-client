@@ -51,11 +51,12 @@ export default {
       local: {
         endpoints: {
           login: {
-            url: '/login',
-            method: 'post'
+            url: '/api/login',
+            method: 'post',
+            propertyName: 'meta.token'
           },
           logout: {
-            url: '/logout',
+            url: '/api/logout',
             method: 'post'
           },
           user: {
@@ -64,8 +65,8 @@ export default {
             propertyName: false
           }
         },
-        tokenRequired: false,
-        tokenType: false
+        // tokenRequired: false,
+        // tokenType: false
       }
     }
   },
@@ -75,8 +76,8 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: 'http://localhost:8000' + '/',
-    credentials: true
+    baseURL: process.env.BASE_URL || 'http://localhost:8000',
+    // credentials: true
   },
   /*
   ** Build configuration

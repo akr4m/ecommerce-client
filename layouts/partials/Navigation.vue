@@ -56,7 +56,7 @@
                 <template v-if="$auth.loggedIn">
                     <div class="navbar-end">
                         <nuxt-link :to="{ name: 'account' }" class="navbar-item">
-                            {{ $auth.user.name }}
+                            {{ $auth.user.data.name }}
                         </nuxt-link>
                         <a href="#" class="navbar-item" @click.prevent="signOut">
                             Sign out
