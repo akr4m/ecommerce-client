@@ -4,6 +4,8 @@
     <div class="columns is-centered">
       <div class="column is-three-quarters">
         <h1 class="title is-4">Your cart</h1>
+        
+        <p v-if="changed">Product stock has been updated</p>
 
         <article class="message" v-if="count">
           <CartOverView />
@@ -37,7 +39,8 @@ export default {
     computed: {
       ...mapGetters({
         count: 'cart/count',
-        empty: 'cart/empty'
+        empty: 'cart/empty',
+        changed: 'cart/changed'
       })
     }
 }
