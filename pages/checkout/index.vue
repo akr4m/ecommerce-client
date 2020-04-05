@@ -3,7 +3,7 @@
   <div class="container is-fluid">
     <div class="columns">
       <div class="column is-three-quarters">
-        <ShippingAddress :addresses="addresses" />
+        <ShippingAddress :addresses="addresses" v-model="form.address_id" />
 
         <article class="message">
           <div class="message-body">
@@ -17,9 +17,9 @@
               Shipping
             </h1>
             <div class="select is-fullwidth">
-              <select>
-                <option>
-                  Royal Mail 1st Class
+              <select v-model="shippingMethodId">
+                <option v-for="shipping in shippingMethods" :key="shipping.id" :value="shipping.id">
+                  {{ shipping.name }} ({{ shipping.price }})
                 </option>
               </select>
             </div>
@@ -41,7 +41,7 @@
                             Shipping
                         </td>
                         <td>
-                            0
+                            {{ shipping.price }}
                         </td>
                     </tr>
                     <tr>
@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions} from 'vuex'
 import CartOverview from '@/components/cart/CartOverview'
 import ShippingAddress from '@/components/checkout/addresses/ShippingAddress'
 
@@ -94,7 +94,23 @@ export default {
 
   data() {
     return {
-      addresses: []
+      addresses: [],
+      shippingMethods: [],
+      form: {
+        address_id: null,
+      }
+    }
+  },
+
+  watch: {
+    'form.address_id' (addressId) {
+      this.getShippingMethodsForAddress(addressId).then(() => {
+        this.setShipping(this.shippingMethods[0])
+      })
+    },
+
+    shippingMethodId () {
+      this.getCart()
     }
   },
 
@@ -103,8 +119,20 @@ export default {
           total: 'cart/total',
           count: 'cart/count',
           empty: 'cart/empty',
-          changed: 'cart/changed'
-      })
+          changed: 'cart/changed',
+          shipping: 'cart/shipping'
+      }),
+
+      shippingMethodId: {
+        get () {
+          return this.shipping ? this.shipping.id : ''
+        },
+        set (shippingMethodId) {
+          this.setShipping(
+            this.shippingMethods.find(s => s.id === shippingMethodId) // {}
+          )
+        }
+      }
   },
 
   async asyncData ({ app }) {
@@ -112,6 +140,21 @@ export default {
 
     return {
       addresses: addresses.data
+    }
+  },
+
+  methods: {
+    ...mapActions({
+      setShipping: 'cart/setShipping',
+      getCart: 'cart/getCart'
+    }),
+
+    async getShippingMethodsForAddress(addressId) {
+      let response = await this.$axios.$get(`api/addresses/${addressId}/shipping`)
+
+      this.shippingMethods = response.data
+
+      return response
     }
   }
 }

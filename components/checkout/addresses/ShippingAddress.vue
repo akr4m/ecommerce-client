@@ -28,8 +28,6 @@
                     </p>
                 </div>
             </template>
-
-            
         </div>
     </article>
 </template>
@@ -86,7 +84,8 @@ export default {
 
     created() {
         if (this.addresses.length) {
-            this.switchAddress(this.defaultAddress)
+            let defaultAddress = this.defaultAddress ? this.defaultAddress : this.addresses[0]    
+            this.switchAddress(defaultAddress)
         }
     },
 
