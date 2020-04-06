@@ -61,7 +61,7 @@
 
         <article class="message">
           <div class="message-body">
-            <button class="button is-info is-fullwidth is-medium" :disabled="empty">
+            <button class="button is-info is-fullwidth is-medium" :disabled="empty || submitting" @click.prevent="order">
               Place order
             </button>
           </div>
@@ -70,7 +70,7 @@
       <div class="column is-one-quarter">
         <article class="message">
           <div class="message-body">
-            <button class="button is-info is-fullwidth is-medium" :disabled="empty">
+            <button class="button is-info is-fullwidth is-medium" :disabled="empty || submitting" @click.prevent="order">
               Place order
             </button>
           </div>
@@ -94,6 +94,7 @@ export default {
 
   data() {
     return {
+      submitting: false,
       addresses: [],
       shippingMethods: [],
       form: {
@@ -146,8 +147,32 @@ export default {
   methods: {
     ...mapActions({
       setShipping: 'cart/setShipping',
-      getCart: 'cart/getCart'
+      getCart: 'cart/getCart',
+      flash: 'alert/flash'
     }),
+
+    async order() {
+      this.submitting = true
+
+      try {
+        await this.$axios.$post('api/orders', {
+          ...this.form,
+          shipping_method_id: this.shippingMethodId
+        })
+
+        await this.getCart()
+
+        this.flash('Order placed')
+
+        this.$router.replace({
+          name: 'orders'
+        })
+      } catch (e) {
+        this.flash(e.response.data.message)          
+        await this.getCart()
+      }
+      this.submitting = false
+    },
 
     async getShippingMethodsForAddress(addressId) {
       let response = await this.$axios.$get(`api/addresses/${addressId}/shipping`)
