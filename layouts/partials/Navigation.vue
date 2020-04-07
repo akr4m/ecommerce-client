@@ -69,9 +69,9 @@
                     </nuxt-link>
                     
                 </div>
-                <a href="#" class="navbar-item">
+                <nuxt-link :to="{ name: 'orders' }" class="navbar-item">
                     Orders
-                </a>
+                </nuxt-link>
                 <nuxt-link :to="{ name: 'cart' }" class="navbar-item">
                     Cart ({{ cartCount }})
                 </nuxt-link>
