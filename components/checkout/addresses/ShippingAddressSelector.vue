@@ -12,7 +12,7 @@
                     </p>
                 </td>
                 <td>
-                    <a href="#" class="button is-info" @click.prevent="$emit('ship', address)">
+                    <a href="#" class="button is-info" @click.prevent="$emit('click', address)">
                         Ship here
                     </a>
                 </td>
