@@ -84,6 +84,10 @@ import ShippingAddress from '@/components/checkout/addresses/ShippingAddress'
 import PaymentMethod from '@/components/checkout/paymentMethods/PaymentMethod'
 
 export default {
+  middleware: [
+    'redirectIfGuest'
+  ],
+
   components: {
       CartOverview,
       ShippingAddress,
